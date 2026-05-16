@@ -1,0 +1,10 @@
+{
+	"id": "lunan-vault-cleaner",
+	"name": "Vault Cleaner",
+	"version": "1.0.1",
+	"minAppVersion": "1.3.0",
+	"description": "An Obsidian plugin for intelligently cleaning up orphaned files and attachments with a visual dashboard, scheduled auto-cleanup, and file protection.",
+	"author": "lunan",
+	"authorUrl": "https://github.com/wlunan",
+	"isDesktopOnly": false
+}
