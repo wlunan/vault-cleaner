@@ -56,7 +56,7 @@ export const zhCN = {
 		execute: "🧹 执行清理",
 	},
 	settings: {
-		title: "🧹 Vault Cleaner 设置",
+		title: " Vault Cleanup Dashboard 设置",
 		cleanupSettings: "🗑 清理设置",
 		deleteStrategy: "删除策略",
 		deleteStrategyDesc: "文件删除方式",

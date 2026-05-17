@@ -1,4 +1,4 @@
-# Vault Cleaner
+# Vault Cleanup Dashboard
 
 [English](README_EN.md) | [中文](README.md)
 
@@ -19,7 +19,7 @@ An Obsidian plugin for intelligently cleaning up orphaned files and attachments 
 
 ### Quick Start
 
-1. Click the **Vault Cleaner** icon in the sidebar to open the cleaning dashboard
+1. Click the **Vault Cleanup Dashboard** icon in the sidebar to open the cleaning dashboard
 2. Click **Scan Vault** to find orphaned files
 3. Review statistics to see the number of orphaned files
 4. Choose to clean attachments, notes, or all orphaned files as needed
@@ -39,14 +39,14 @@ Quick access via Obsidian's command palette (`Ctrl/Cmd + P`):
 ### From Community Plugins (Recommended)
 
 1. Open Obsidian Settings → Community Plugins → Browse
-2. Search for "Vault Cleaner"
+2. Search for "Vault Cleanup Dashboard"
 3. Click Install and Enable
 
 ### Manual Installation
 
 1. Download the latest release from [Releases](https://github.com/wlunan/vault-cleaner/releases)
 2. Extract the plugin folder into your vault's `.obsidian/plugins/` directory
-3. Open Obsidian Settings → Community Plugins → Enable "Vault Cleaner"
+3. Open Obsidian Settings → Community Plugins → Enable "Vault Cleanup Dashboard"
 
 ## Configuration
 

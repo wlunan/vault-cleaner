@@ -1,4 +1,4 @@
-# Vault Cleaner (仓库清理器)
+# Vault Cleanup Dashboard (仓库清理面板)
 
 [English](README_EN.md) | [中文](README.md)
 
@@ -19,7 +19,7 @@
 
 ### 快速开始
 
-1. 点击侧边栏的 **Vault Cleaner** 图标打开清理面板
+1. 点击侧边栏的 **Vault Cleanup Dashboard** 图标打开清理面板
 2. 点击 **扫描 Vault** 查找孤立文件
 3. 查看统计信息，了解孤立文件数量
 4. 根据需要选择清理附件、笔记或所有孤立文件
@@ -39,14 +39,14 @@
 ### 从社区插件市场安装（推荐）
 
 1. 打开 Obsidian 设置 → 社区插件 → 浏览
-2. 搜索 "Vault Cleaner"
+2. 搜索 "Vault Cleanup Dashboard"
 3. 点击安装并启用
 
 ### 手动安装
 
 1. 从 [Releases](https://github.com/wlunan/vault-cleaner/releases) 下载最新版本
 2. 将插件文件夹解压到仓库的 `.obsidian/plugins/` 目录中
-3. 打开 Obsidian 设置 → 社区插件 → 启用 "Vault Cleaner"
+3. 打开 Obsidian 设置 → 社区插件 → 启用 "Vault Cleanup Dashboard"
 
 ## 配置说明
 

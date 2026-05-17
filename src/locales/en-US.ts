@@ -56,7 +56,7 @@ export const enUS = {
 		execute: "🧹 Execute Cleanup",
 	},
 	settings: {
-		title: "🧹 Vault Cleaner Settings",
+		title: "🧹 Vault Cleanup Dashboard Settings",
 		cleanupSettings: "🗑 Cleanup Settings",
 		deleteStrategy: "Delete Strategy",
 		deleteStrategyDesc: "How files should be deleted",
