@@ -59,7 +59,7 @@ var import_obsidian = __toModule(require("obsidian"));
 // src/locales/zh-CN.ts
 var zhCN = {
   plugin: {
-    name: "Nuke Orphans \u6E05\u7406\u5668",
+    name: "Vault Cleanup Dashboard",
     openDashboard: "\u6253\u5F00\u63A7\u5236\u9762\u677F",
     cleanAttachments: "\u6E05\u7406\u5B64\u7ACB\u9644\u4EF6",
     cleanNotes: "\u6E05\u7406\u5B64\u7ACB\u7B14\u8BB0",
@@ -72,7 +72,7 @@ var zhCN = {
     noOrphans: "\u672A\u627E\u5230\u5B64\u7ACB\u6587\u4EF6"
   },
   dashboard: {
-    title: "\u{1F9F9} Nuke Orphans \u6E05\u7406\u5668",
+    title: "\u{1F9F9} Vault Cleanup Dashboard",
     scanStatus: "\u{1F4CA} Vault \u626B\u63CF\u72B6\u6001",
     scanning: "\u23F3 \u6B63\u5728\u626B\u63CF...",
     scanComplete: "\u2705 \u626B\u63CF\u5B8C\u6210",
@@ -115,7 +115,7 @@ var zhCN = {
     execute: "\u{1F9F9} \u6267\u884C\u6E05\u7406"
   },
   settings: {
-    title: "\u{1F9F9} Vault Cleaner \u8BBE\u7F6E",
+    title: " Vault Cleanup Dashboard \u8BBE\u7F6E",
     cleanupSettings: "\u{1F5D1} \u6E05\u7406\u8BBE\u7F6E",
     deleteStrategy: "\u5220\u9664\u7B56\u7565",
     deleteStrategyDesc: "\u6587\u4EF6\u5220\u9664\u65B9\u5F0F",
@@ -162,7 +162,7 @@ var zhCN = {
 // src/locales/en-US.ts
 var enUS = {
   plugin: {
-    name: "Nuke Orphans Cleaner",
+    name: "Vault Cleanup Dashboard",
     openDashboard: "Open Dashboard",
     cleanAttachments: "Trash orphaned attachments",
     cleanNotes: "Trash orphaned notes",
@@ -175,7 +175,7 @@ var enUS = {
     noOrphans: "No orphaned files have been found"
   },
   dashboard: {
-    title: "\u{1F9F9} Nuke Orphans Cleaner",
+    title: " Vault Cleanup Dashboard",
     scanStatus: "\u{1F4CA} Vault Scan Status",
     scanning: "\u23F3 Scanning vault...",
     scanComplete: "\u2705 Scan complete",
@@ -218,7 +218,7 @@ var enUS = {
     execute: "\u{1F9F9} Execute Cleanup"
   },
   settings: {
-    title: "\u{1F9F9} Vault Cleaner Settings",
+    title: "\u{1F9F9} Vault Cleanup Dashboard Settings",
     cleanupSettings: "\u{1F5D1} Cleanup Settings",
     deleteStrategy: "Delete Strategy",
     deleteStrategyDesc: "How files should be deleted",

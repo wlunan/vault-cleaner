@@ -1,6 +1,6 @@
 export const enUS = {
 	plugin: {
-		name: "Nuke Orphans Cleaner",
+		name: "Vault Cleanup Dashboard",
 		openDashboard: "Open Dashboard",
 		cleanAttachments: "Trash orphaned attachments",
 		cleanNotes: "Trash orphaned notes",
@@ -13,7 +13,7 @@ export const enUS = {
 		noOrphans: "No orphaned files have been found",
 	},
 	dashboard: {
-		title: "🧹 Nuke Orphans Cleaner",
+		title: " Vault Cleanup Dashboard",
 		scanStatus: "📊 Vault Scan Status",
 		scanning: "⏳ Scanning vault...",
 		scanComplete: "✅ Scan complete",

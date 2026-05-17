@@ -15,6 +15,12 @@ An Obsidian plugin for intelligently cleaning up orphaned files and attachments 
 - **Flexible Configuration**: Supports whitelist folders, regex ignore patterns, custom attachment paths, and more
 - **Bilingual Interface**: Full internationalization support with English and Chinese
 
+## Screenshots
+
+![Dashboard](assets/1.png)
+
+![Preview](assets/2.png)
+
 ## Usage
 
 ### Quick Start

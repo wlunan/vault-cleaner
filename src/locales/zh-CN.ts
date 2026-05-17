@@ -1,6 +1,6 @@
 export const zhCN = {
 	plugin: {
-		name: "Nuke Orphans 清理器",
+		name: "Vault Cleanup Dashboard",
 		openDashboard: "打开控制面板",
 		cleanAttachments: "清理孤立附件",
 		cleanNotes: "清理孤立笔记",
@@ -13,7 +13,7 @@ export const zhCN = {
 		noOrphans: "未找到孤立文件",
 	},
 	dashboard: {
-		title: "🧹 Nuke Orphans 清理器",
+		title: "🧹 Vault Cleanup Dashboard",
 		scanStatus: "📊 Vault 扫描状态",
 		scanning: "⏳ 正在扫描...",
 		scanComplete: "✅ 扫描完成",
