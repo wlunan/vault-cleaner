@@ -1,7 +1,7 @@
 {
 	"id": "wlunan-vault-cleaner",
 	"name": "Vault Cleanup Dashboard",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "1.3.0",
 	"description": "Visual dashboard for intelligently cleaning orphaned files and attachments with scheduled auto-cleanup and file protection.",
 	"author": "lunan",
