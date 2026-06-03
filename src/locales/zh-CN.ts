@@ -54,6 +54,16 @@ export const zhCN = {
 		confirmCheckbox: "我已确认这些文件可以删除",
 		cancel: "❌ 取消",
 		execute: "🧹 执行清理",
+		fileTypes: {
+			note: "笔记",
+			canvas: "画布",
+			image: "图片",
+			video: "视频",
+			audio: "音频",
+			text: "文本",
+			spreadsheet: "表格",
+			document: "文档",
+		},
 	},
 	settings: {
 		title: " Vault Cleanup Dashboard 设置",

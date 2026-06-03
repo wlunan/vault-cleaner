@@ -4,7 +4,7 @@ import { ScanService } from "./scanService";
 import { ActionService } from "./actionService";
 import { t, setLanguage } from "./locales";
 
-const STORAGE_KEY_LAST_CLEAN = "nuke-cleaner-last-auto-clean";
+const STORAGE_KEY_LAST_CLEAN = "vault-cleaner-last-auto-clean";
 
 export class AutoCleanScheduler {
 	private plugin: VaultCleanerPlugin;

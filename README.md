@@ -1,125 +1,179 @@
-# Vault Cleanup Dashboard (仓库清理面板)
+# Vault Cleanup Dashboard
 
-[English](README_EN.md) | [中文](README.md)
+[English](README.md) | [中文](README_CN.md)
 
-一个用于智能清理 Obsidian 仓库中孤立文件和附件的插件。
+An Obsidian plugin for intelligently cleaning up orphaned files and attachments in your vault.
 
-## 功能特性
+## Features
 
-- **可视化控制面板**：通过侧边栏图标一键打开清理面板，实时查看扫描状态和统计信息
-- **智能检测**：精准识别孤立笔记、附件和其他文件，支持 Canvas 文件链接检测
-- **选择性删除**：预览文件列表后勾选确认，避免误删重要文件
-- **自定义回收站**：删除的文件移动到自定义回收站文件夹（默认 `.vault-trash`），支持随时恢复
-- **定时自动清理**：支持自定义间隔天数，自动扫描和清理孤立附件
-- **文件保护机制**：最近修改的文件自动受保护（默认 7 天内），防止误删活跃文件
-- **灵活配置**：支持白名单文件夹、正则忽略模式、自定义附件路径等高级选项
-- **中英文双语**：完整的国际化支持，可切换中文/英文界面
+- **Visual Dashboard**: One-click access via ribbon icon with real-time scan status and statistics
+- **Smart Detection**: Accurately identifies orphaned notes, attachments, and other files, including Canvas file links
+- **Selective Deletion**: Preview and confirm files before deletion to prevent accidental loss
+- **Custom Recycle Bin**: Deleted files are moved to a custom trash folder (default: `.vault-trash`) for easy recovery
+- **Scheduled Auto-Cleanup**: Automatically scan and clean orphaned attachments at customizable intervals (in days)
+- **File Protection**: Recently modified files are automatically protected (default: 7 days) to prevent accidental deletion
+- **Flexible Configuration**: Supports whitelist folders, regex ignore patterns, custom attachment paths, and more
+- **Bilingual Interface**: Full internationalization support with English and Chinese
 
-## 界面预览
+## Screenshots
 
-![控制面板](assets/1.png)
+![Dashboard](assets/1.png)
 
-![预览确认](assets/2.png)
+![Preview](assets/2.png)
 
-## 使用方法
+## Usage
 
-### 快速开始
+### Quick Start
 
-1. 点击侧边栏的 **Vault Cleanup Dashboard** 图标打开清理面板
-2. 点击 **扫描 Vault** 查找孤立文件
-3. 查看统计信息，了解孤立文件数量
-4. 根据需要选择清理附件、笔记或所有孤立文件
-5. 在预览界面确认文件列表后执行清理
+1. Click the **Vault Cleanup Dashboard** icon in the sidebar to open the cleaning dashboard
+2. Click **Scan Vault** to find orphaned files
+3. Review statistics to see the number of orphaned files
+4. Choose to clean attachments, notes, or all orphaned files as needed
+5. Confirm the file list in the preview modal and execute cleanup
 
-### 命令面板
+### Command Palette
 
-通过 Obsidian 命令面板（`Ctrl/Cmd + P`）快速执行：
+Quick access via Obsidian's command palette (`Ctrl/Cmd + P`):
 
-- **打开控制面板** - 打开可视化清理面板
-- **清理孤立附件** - 仅扫描和清理孤立附件
-- **清理孤立笔记** - 仅扫描和清理孤立笔记
-- **清理所有孤立文件** - 扫描和清理所有类型孤立文件
+- **Open Dashboard** - Open the visual cleaning dashboard
+- **Clean Orphaned Attachments** - Scan and clean orphaned attachments only
+- **Clean Orphaned Notes** - Scan and clean orphaned notes only
+- **Clean All Orphaned Files** - Scan and clean all types of orphaned files
 
-## 安装
+## Installation
 
-### 从社区插件市场安装（推荐）
+### From Community Plugins (Recommended)
 
-1. 打开 Obsidian 设置 → 社区插件 → 浏览
-2. 搜索 "Vault Cleanup Dashboard"
-3. 点击安装并启用
+1. Open Obsidian Settings → Community Plugins → Browse
+2. Search for "Vault Cleanup Dashboard"
+3. Click Install and Enable
 
-### 手动安装
+### Manual Installation
 
-1. 从 [Releases](https://github.com/wlunan/vault-cleaner/releases) 下载最新版本
-2. 将插件文件夹解压到仓库的 `.obsidian/plugins/` 目录中
-3. 打开 Obsidian 设置 → 社区插件 → 启用 "Vault Cleanup Dashboard"
+1. Download the latest release from [Releases](https://github.com/wlunan/vault-cleaner/releases)
+2. Extract the plugin folder into your vault's `.obsidian/plugins/` directory
+3. Open Obsidian Settings → Community Plugins → Enable "Vault Cleanup Dashboard"
 
-## 配置说明
+## Configuration
 
-### 清理设置
+### Cleanup Settings
 
-| 配置项 | 说明 | 默认值 |
-|--------|------|--------|
-| **删除策略** | 移动到自定义垃圾桶 或 永久删除（危险） | 自定义垃圾桶 |
-| **自定义垃圾桶路径** | 删除文件的存放位置 | `.vault-trash` |
-| **最近修改保护** | 此天数内修改的文件不会被删除 | 7 天 |
-| **白名单文件夹** | 排除扫描的文件夹（每行一个） | 无 |
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Delete Strategy** | Move to custom trash or permanent delete (dangerous) | Custom trash |
+| **Custom Trash Path** | Folder location for deleted files | `.vault-trash` |
+| **Recently Modified Protection** | Files modified within this many days are protected | 7 days |
+| **Whitelist Folders** | Folders excluded from scanning (one per line) | None |
 
-### 自动清理设置
+### Auto-Cleanup Settings
 
-| 配置项 | 说明 | 默认值 |
-|--------|------|--------|
-| **启用自动清理** | 按计划自动清理孤立附件 | 关闭 |
-| **清理间隔** | 自动清理执行频率（天） | 3 天 |
-| **打开 Vault 时检查** | 打开仓库时运行自动清理检查 | 开启 |
-| **加载插件时检查** | 加载插件时运行自动清理检查 | 开启 |
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Enable Auto-Cleanup** | Automatically clean orphaned attachments on schedule | Disabled |
+| **Cleanup Interval** | Frequency of auto-cleanup execution (days) | 3 days |
+| **Check on Vault Open** | Run auto-cleanup check when vault is opened | Enabled |
+| **Check on Plugin Load** | Run auto-cleanup check when plugin is loaded | Enabled |
 
-> **注意**：自动清理功能仅影响附件，不会删除笔记文件，确保重要内容安全。
+> **Note**: Auto-cleanup only affects attachments and will not delete note files, ensuring your important content is safe.
 
-### 高级设置
+### Advanced Settings
 
-| 配置项 | 说明 | 默认值 |
-|--------|------|--------|
-| **覆盖附件文件夹** | 自定义附件存储位置（每行一个） | 跟随仓库设置 |
-| **忽略模式** | 正则表达式模式，匹配的文件将被排除 | 无 |
-| **测试设置** | 输入路径测试是否被忽略（红色=忽略，绿色=保留） | - |
-| **替代附件查找算法** | 如果在子文件夹中找不到附件，尝试启用此选项 | 关闭 |
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Override Attachment Folders** | Custom attachment storage locations (one per line) | Follows vault settings |
+| **Ignore Patterns** | Regex patterns; matching files will be excluded | None |
+| **Test Settings** | Test if a path is ignored (red = ignored, green = kept) | - |
+| **Alternative Attachment Algorithm** | Enable if attachments in subfolders are not detected | Disabled |
 
-## 开发
+## Development
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- npm or yarn
+
+### Setup
 
 ```bash
-# 安装依赖
-npm install
+# Clone the repository
+git clone https://github.com/wlunan/vault-cleaner.git
+cd vault-cleaner
 
-# 开发模式（热重载）
+# Install dependencies
+npm install
+```
+
+### Development Commands
+
+```bash
+# Development mode with hot reload (watches for changes and rebuilds)
 npm run dev
 
-# 生产构建
+# Build for production
 npm run build
 ```
 
-## 项目结构
+### Local Testing in Obsidian
+
+#### Method 1: Using Test Vault (Recommended)
+
+1. Run `npm run dev` to start the development server
+2. Open the `test-vault` folder in Obsidian as a vault
+3. Enable the plugin in Settings → Community Plugins
+4. Changes will auto-reload when you modify source files
+
+#### Method 2: Copy to Your Vault
+
+1. Run `npm run build` to build the plugin
+2. Copy the following files to your vault's `.obsidian/plugins/vault-cleaner/` directory:
+   - `main.js`
+   - `manifest.json`
+   - `styles.css`
+3. Enable the plugin in Settings → Community Plugins
+4. Run `npm run dev` for auto-rebuild, then reload Obsidian to see changes
+
+#### Method 3: Using hot-reload Plugin
+
+1. Install the [hot-reload](https://github.com/pjeby/hot-reload) plugin in your vault
+2. Create a file named `.hot-reload` in your vault root
+3. Run `npm run dev` - changes will auto-reload without restarting Obsidian
+
+### Release
+
+```bash
+# Bump version (updates package.json, manifest.json)
+npm run version
+
+# Commit and tag
+git add .
+git commit -m "Release vX.Y.Z"
+git tag vX.Y.Z
+git push && git push --tags
+```
+
+Create a new release on GitHub with the built files (`main.js`, `manifest.json`, `styles.css`).
+
+## Project Structure
 
 ```
 src/
-├── main.ts              # 插件入口，注册命令和图标
-├── dashboardModal.ts    # 可视化控制面板
-├── scanService.ts       # 孤立文件扫描服务
-├── actionService.ts     # 文件操作服务（删除/恢复）
-├── previewModal.ts      # 删除预览确认对话框
-├── trash_modal.ts       # 回收站管理对话框
-├── autoCleanScheduler.ts # 定时自动清理调度器
-├── settings.ts          # 设置界面
-└── locales/             # 国际化语言包
-    ├── zh-CN.ts         # 中文
-    └── en-US.ts         # 英文
+├── main.ts              # Plugin entry point, registers commands and ribbon icon
+├── dashboardModal.ts    # Visual cleaning dashboard
+├── scanService.ts       # Orphan file scanning service
+├── actionService.ts     # File operation service (delete/restore)
+├── previewModal.ts      # Delete preview confirmation modal
+├── autoCleanScheduler.ts # Scheduled auto-cleanup scheduler
+├── settings.ts          # Settings interface
+└── locales/             # Internationalization language packs
+    ├── zh-CN.ts         # Chinese
+    └── en-US.ts         # English
 ```
 
-## 许可证
+## License
 
 MIT
 
-## 致谢
+## Acknowledgments
 
-- 本插件基于 [nuke-orphans-plugin](https://github.com/ozntel/nuke-orphans-plugin) 二次开发，在原插件基础上增加了可视化控制面板、定时自动清理、文件保护机制等增强功能。感谢原作者的优秀工作。
-- 感谢所有为 Obsidian 社区做出贡献的开发者
+- This plugin is a fork of [nuke-orphans-plugin](https://github.com/ozntel/nuke-orphans-plugin), enhanced with a visual dashboard, scheduled auto-cleanup, file protection mechanisms, and more. Thanks to the original author for their excellent work.
+- Thanks to all developers contributing to the Obsidian community.

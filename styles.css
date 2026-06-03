@@ -1,33 +1,8 @@
-.trash-modal-button {
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.trash-modal-button:last-of-type {
-    float: right;
-}
-
-.trash-modal-file-links {
-    overflow-y: scroll;
-    max-height: 30vw;
-    margin: 1vw;
-}
-
-.trash-modal-link {
-    color: var(--text-accent);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.trash-modal-link:hover {
-    color: var(--text-accent-hover, var(--text-accent));
-}
-
-.nuke-orphans-pass {
+.vault-cleaner-pass {
     color: lightgreen !important;
 }
 
-.nuke-orphans-fail {
+.vault-cleaner-fail {
     color: red !important;
 }
 

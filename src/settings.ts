@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import VaultCleanerPlugin from "./main";
-import { t, setLanguage, getLanguage, Language, getAvailableLanguages } from "./locales";
+import { t, setLanguage, Language, getAvailableLanguages } from "./locales";
 
 export type DeleteStrategy = "custom-folder" | "permanent";
 
@@ -230,7 +230,7 @@ export class VaultCleanerSettingsTab extends PluginSettingTab {
 				text.onChange(value => {
 					resetColor();
 					if (value.length === 0) return;
-					if (this.plugin.getIgnoreFilter().test(value))
+					if (this.plugin.scanService.getIgnoreFilter().test(value))
 						text.inputEl.classList.add(CSS_CLASS_CHECK_FAIL);
 					else
 						text.inputEl.classList.add(CSS_CLASS_CHECK_PASS);

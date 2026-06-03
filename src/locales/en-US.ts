@@ -54,6 +54,16 @@ export const enUS = {
 		confirmCheckbox: "I have confirmed these files can be deleted",
 		cancel: "❌ Cancel",
 		execute: "🧹 Execute Cleanup",
+		fileTypes: {
+			note: "Note",
+			canvas: "Canvas",
+			image: "Image",
+			video: "Video",
+			audio: "Audio",
+			text: "Text",
+			spreadsheet: "Spreadsheet",
+			document: "Document",
+		},
 	},
 	settings: {
 		title: "🧹 Vault Cleanup Dashboard Settings",
