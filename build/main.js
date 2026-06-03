@@ -541,11 +541,6 @@ var ScanService = class {
       }
       const canvasLinks = yield this.getCanvasLinks();
       const filter = this.getIgnoreFilter();
-      console.log("=== Vault Cleaner \u8C03\u8BD5\u4FE1\u606F ===");
-      console.log("\u88AB\u94FE\u63A5\u7684\u6587\u4EF6 (inboundLinks):", [...inboundLinks]);
-      console.log("\u94FE\u63A5\u51FA\u53BB\u7684\u6587\u4EF6 (outboundLinks):", [...outboundLinks]);
-      console.log("Canvas \u5F15\u7528\u7684\u6587\u4EF6:", [...canvasLinks]);
-      console.log("resolvedLinks \u539F\u59CB\u6570\u636E:", this.app.metadataCache.resolvedLinks);
       const orphans = this.app.vault.getFiles().filter((file) => {
         return ![
           inboundLinks.has(file.path),
