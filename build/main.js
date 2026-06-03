@@ -51,7 +51,7 @@ var __async = (__this, __arguments, generator) => {
 __export(exports, {
   default: () => VaultCleanerPlugin
 });
-var import_obsidian7 = __toModule(require("obsidian"));
+var import_obsidian6 = __toModule(require("obsidian"));
 
 // src/settings.ts
 var import_obsidian = __toModule(require("obsidian"));
@@ -59,7 +59,7 @@ var import_obsidian = __toModule(require("obsidian"));
 // src/locales/zh-CN.ts
 var zhCN = {
   plugin: {
-    name: "Nuke Orphans \u6E05\u7406\u5668",
+    name: "Vault Cleanup Dashboard",
     openDashboard: "\u6253\u5F00\u63A7\u5236\u9762\u677F",
     cleanAttachments: "\u6E05\u7406\u5B64\u7ACB\u9644\u4EF6",
     cleanNotes: "\u6E05\u7406\u5B64\u7ACB\u7B14\u8BB0",
@@ -72,7 +72,7 @@ var zhCN = {
     noOrphans: "\u672A\u627E\u5230\u5B64\u7ACB\u6587\u4EF6"
   },
   dashboard: {
-    title: "\u{1F9F9} Nuke Orphans \u6E05\u7406\u5668",
+    title: "\u{1F9F9} Vault Cleanup Dashboard",
     scanStatus: "\u{1F4CA} Vault \u626B\u63CF\u72B6\u6001",
     scanning: "\u23F3 \u6B63\u5728\u626B\u63CF...",
     scanComplete: "\u2705 \u626B\u63CF\u5B8C\u6210",
@@ -112,10 +112,20 @@ var zhCN = {
     warning: "\u26A0\uFE0F \u8BF7\u5728\u7EE7\u7EED\u524D\u68C0\u67E5\u4EE5\u4E0A\u6587\u4EF6\u3002",
     confirmCheckbox: "\u6211\u5DF2\u786E\u8BA4\u8FD9\u4E9B\u6587\u4EF6\u53EF\u4EE5\u5220\u9664",
     cancel: "\u274C \u53D6\u6D88",
-    execute: "\u{1F9F9} \u6267\u884C\u6E05\u7406"
+    execute: "\u{1F9F9} \u6267\u884C\u6E05\u7406",
+    fileTypes: {
+      note: "\u7B14\u8BB0",
+      canvas: "\u753B\u5E03",
+      image: "\u56FE\u7247",
+      video: "\u89C6\u9891",
+      audio: "\u97F3\u9891",
+      text: "\u6587\u672C",
+      spreadsheet: "\u8868\u683C",
+      document: "\u6587\u6863"
+    }
   },
   settings: {
-    title: "\u{1F9F9} Vault Cleaner \u8BBE\u7F6E",
+    title: " Vault Cleanup Dashboard \u8BBE\u7F6E",
     cleanupSettings: "\u{1F5D1} \u6E05\u7406\u8BBE\u7F6E",
     deleteStrategy: "\u5220\u9664\u7B56\u7565",
     deleteStrategyDesc: "\u6587\u4EF6\u5220\u9664\u65B9\u5F0F",
@@ -162,7 +172,7 @@ var zhCN = {
 // src/locales/en-US.ts
 var enUS = {
   plugin: {
-    name: "Nuke Orphans Cleaner",
+    name: "Vault Cleanup Dashboard",
     openDashboard: "Open Dashboard",
     cleanAttachments: "Trash orphaned attachments",
     cleanNotes: "Trash orphaned notes",
@@ -175,7 +185,7 @@ var enUS = {
     noOrphans: "No orphaned files have been found"
   },
   dashboard: {
-    title: "\u{1F9F9} Nuke Orphans Cleaner",
+    title: " Vault Cleanup Dashboard",
     scanStatus: "\u{1F4CA} Vault Scan Status",
     scanning: "\u23F3 Scanning vault...",
     scanComplete: "\u2705 Scan complete",
@@ -215,10 +225,20 @@ var enUS = {
     warning: "\u26A0\uFE0F Please review the files above before proceeding.",
     confirmCheckbox: "I have confirmed these files can be deleted",
     cancel: "\u274C Cancel",
-    execute: "\u{1F9F9} Execute Cleanup"
+    execute: "\u{1F9F9} Execute Cleanup",
+    fileTypes: {
+      note: "Note",
+      canvas: "Canvas",
+      image: "Image",
+      video: "Video",
+      audio: "Audio",
+      text: "Text",
+      spreadsheet: "Spreadsheet",
+      document: "Document"
+    }
   },
   settings: {
-    title: "\u{1F9F9} Vault Cleaner Settings",
+    title: "\u{1F9F9} Vault Cleanup Dashboard Settings",
     cleanupSettings: "\u{1F5D1} Cleanup Settings",
     deleteStrategy: "Delete Strategy",
     deleteStrategyDesc: "How files should be deleted",
@@ -412,7 +432,7 @@ var VaultCleanerSettingsTab = class extends import_obsidian.PluginSettingTab {
         resetColor();
         if (value.length === 0)
           return;
-        if (this.plugin.getIgnoreFilter().test(value))
+        if (this.plugin.scanService.getIgnoreFilter().test(value))
           text.inputEl.classList.add(CSS_CLASS_CHECK_FAIL);
         else
           text.inputEl.classList.add(CSS_CLASS_CHECK_PASS);
@@ -424,66 +444,6 @@ var VaultCleanerSettingsTab = class extends import_obsidian.PluginSettingTab {
       this.plugin.settings.alternativeAttachmentAlg = value;
       yield this.plugin.saveSettings();
     })));
-  }
-};
-
-// src/trash_modal.ts
-var import_obsidian2 = __toModule(require("obsidian"));
-var path = __toModule(require("path"));
-var TrashFilesModal = class extends import_obsidian2.Modal {
-  constructor(app, files, trashFolderPath, useSystemTrash) {
-    super(app);
-    this.files = files;
-    this.trashFolderPath = trashFolderPath;
-    this.useSystemTrash = useSystemTrash;
-  }
-  onOpen() {
-    let { contentEl, titleEl } = this;
-    titleEl.setText("Move " + this.files.length + " files to trash?");
-    const div = contentEl.createDiv({
-      cls: "trash-modal-file-links"
-    });
-    this.files.forEach((file) => {
-      div.createEl("p", {
-        cls: "trash-modal-link",
-        text: file.path
-      }).addEventListener("click", () => __async(this, null, function* () {
-        this.close();
-        yield this.app.workspace.activeLeaf.openFile(file);
-      }));
-    });
-    contentEl.createEl("button", {
-      cls: ["trash-modal-button"],
-      text: "Cancel"
-    }).addEventListener("click", () => this.close());
-    contentEl.createEl("button", {
-      cls: ["trash-modal-button"],
-      text: "Copy list to clipboard"
-    }).addEventListener("click", () => __async(this, null, function* () {
-      yield navigator.clipboard.writeText(this.files.map((file) => file.path).join("\n"));
-      new import_obsidian2.Notice("Copied list to clipboard");
-    }));
-    contentEl.createEl("button", {
-      cls: ["mod-cta", "trash-modal-button"],
-      text: "Trash"
-    }).addEventListener("click", () => __async(this, null, function* () {
-      if (this.trashFolderPath.length > 0) {
-        if (!(yield this.app.vault.adapter.exists(this.trashFolderPath)))
-          yield this.app.vault.createFolder(this.trashFolderPath);
-        this.files.forEach((file) => __async(this, null, function* () {
-          return yield this.app.fileManager.renameFile(file, path.join(this.trashFolderPath, file.name));
-        }));
-      } else
-        this.files.forEach((file) => __async(this, null, function* () {
-          return yield this.app.vault.trash(file, this.useSystemTrash);
-        }));
-      new import_obsidian2.Notice("Trashed " + this.files.length + " files");
-      this.close();
-    }));
-  }
-  onClose() {
-    let { contentEl } = this;
-    contentEl.empty();
   }
 };
 
@@ -524,12 +484,12 @@ var ScanService = class {
     return this.getAttachmentsPaths().some((element) => {
       if (element.startsWith("./")) {
         if (this.plugin.settings.alternativeAttachmentAlg) {
-          let path3 = file.parent;
-          while (path3 && path3.name !== void 0 && path3.name.length > 0) {
-            if (path3.name === element.substring(2)) {
+          let path2 = file.parent;
+          while (path2 && path2.name !== void 0 && path2.name.length > 0) {
+            if (path2.name === element.substring(2)) {
               return true;
             }
-            path3 = path3.parent;
+            path2 = path2.parent;
           }
         } else {
           return file.path.startsWith(element.substring(2)) || file.path.contains(element.substring(1) + "/");
@@ -571,12 +531,25 @@ var ScanService = class {
   }
   scanVault() {
     return __async(this, null, function* () {
-      const links = new Set(Object.values(this.app.metadataCache.resolvedLinks).flatMap((x) => Object.keys(x)));
+      const inboundLinks = new Set(Object.values(this.app.metadataCache.resolvedLinks).flatMap((x) => Object.keys(x)));
+      const resolvedLinks = this.app.metadataCache.resolvedLinks;
+      const outboundLinks = new Set();
+      for (const source in resolvedLinks) {
+        if (Object.keys(resolvedLinks[source]).length > 0) {
+          outboundLinks.add(source);
+        }
+      }
       const canvasLinks = yield this.getCanvasLinks();
       const filter = this.getIgnoreFilter();
+      console.log("=== Vault Cleaner \u8C03\u8BD5\u4FE1\u606F ===");
+      console.log("\u88AB\u94FE\u63A5\u7684\u6587\u4EF6 (inboundLinks):", [...inboundLinks]);
+      console.log("\u94FE\u63A5\u51FA\u53BB\u7684\u6587\u4EF6 (outboundLinks):", [...outboundLinks]);
+      console.log("Canvas \u5F15\u7528\u7684\u6587\u4EF6:", [...canvasLinks]);
+      console.log("resolvedLinks \u539F\u59CB\u6570\u636E:", this.app.metadataCache.resolvedLinks);
       const orphans = this.app.vault.getFiles().filter((file) => {
         return ![
-          links.has(file.path),
+          inboundLinks.has(file.path),
+          outboundLinks.has(file.path),
           canvasLinks.has(file.path),
           filter.test(file.path),
           this.isProtected(file)
@@ -594,8 +567,8 @@ var ScanService = class {
 };
 
 // src/actionService.ts
-var import_obsidian3 = __toModule(require("obsidian"));
-var path2 = __toModule(require("path"));
+var import_obsidian2 = __toModule(require("obsidian"));
+var path = __toModule(require("path"));
 var ActionService = class {
   constructor(plugin) {
     this.plugin = plugin;
@@ -615,24 +588,24 @@ var ActionService = class {
     const trans = t();
     const ext = file.extension.toLowerCase();
     const typeMap = {
-      "md": trans.preview.fileType === "\u7C7B\u578B" ? "\u7B14\u8BB0" : "Note",
-      "canvas": trans.preview.fileType === "\u7C7B\u578B" ? "\u753B\u5E03" : "Canvas",
-      "png": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
-      "jpg": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
-      "jpeg": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
-      "gif": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
-      "webp": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
-      "svg": trans.preview.fileType === "\u7C7B\u578B" ? "\u56FE\u7247" : "Image",
+      "md": trans.preview.fileTypes.note,
+      "canvas": trans.preview.fileTypes.canvas,
+      "png": trans.preview.fileTypes.image,
+      "jpg": trans.preview.fileTypes.image,
+      "jpeg": trans.preview.fileTypes.image,
+      "gif": trans.preview.fileTypes.image,
+      "webp": trans.preview.fileTypes.image,
+      "svg": trans.preview.fileTypes.image,
       "pdf": "PDF",
-      "mp4": trans.preview.fileType === "\u7C7B\u578B" ? "\u89C6\u9891" : "Video",
-      "webm": trans.preview.fileType === "\u7C7B\u578B" ? "\u89C6\u9891" : "Video",
-      "mp3": trans.preview.fileType === "\u7C7B\u578B" ? "\u97F3\u9891" : "Audio",
-      "wav": trans.preview.fileType === "\u7C7B\u578B" ? "\u97F3\u9891" : "Audio",
-      "ogg": trans.preview.fileType === "\u7C7B\u578B" ? "\u97F3\u9891" : "Audio",
-      "txt": trans.preview.fileType === "\u7C7B\u578B" ? "\u6587\u672C" : "Text",
-      "csv": trans.preview.fileType === "\u7C7B\u578B" ? "\u8868\u683C" : "Spreadsheet",
-      "xlsx": trans.preview.fileType === "\u7C7B\u578B" ? "\u8868\u683C" : "Spreadsheet",
-      "docx": trans.preview.fileType === "\u7C7B\u578B" ? "\u6587\u6863" : "Document"
+      "mp4": trans.preview.fileTypes.video,
+      "webm": trans.preview.fileTypes.video,
+      "mp3": trans.preview.fileTypes.audio,
+      "wav": trans.preview.fileTypes.audio,
+      "ogg": trans.preview.fileTypes.audio,
+      "txt": trans.preview.fileTypes.text,
+      "csv": trans.preview.fileTypes.spreadsheet,
+      "xlsx": trans.preview.fileTypes.spreadsheet,
+      "docx": trans.preview.fileTypes.document
     };
     return typeMap[ext] || ext.toUpperCase();
   }
@@ -651,7 +624,7 @@ var ActionService = class {
       setLanguage(this.plugin.settings.language);
       const trans = t();
       if (files.length === 0) {
-        new import_obsidian3.Notice(trans.action.noFilesToDelete);
+        new import_obsidian2.Notice(trans.action.noFilesToDelete);
         return;
       }
       const strategy = this.plugin.settings.deleteStrategy;
@@ -664,10 +637,10 @@ var ActionService = class {
             yield this.permanentDelete(files);
             break;
         }
-        new import_obsidian3.Notice(trans.action.deleteSuccess.replace("{count}", String(files.length)));
+        new import_obsidian2.Notice(trans.action.deleteSuccess.replace("{count}", String(files.length)));
       } catch (error) {
         console.error("Error during file deletion:", error);
-        new import_obsidian3.Notice(trans.action.deleteFailed.replace("{error}", error.message));
+        new import_obsidian2.Notice(trans.action.deleteFailed.replace("{error}", error.message));
       }
     });
   }
@@ -678,7 +651,7 @@ var ActionService = class {
         yield this.app.vault.createFolder(trashPath);
       }
       for (const file of files) {
-        const destPath = path2.posix.join(trashPath, file.name);
+        const destPath = path.posix.join(trashPath, file.name);
         yield this.app.fileManager.renameFile(file, destPath);
       }
     });
@@ -696,39 +669,39 @@ var ActionService = class {
       const trans = t();
       const strategy = this.plugin.settings.deleteStrategy;
       if (strategy === "permanent") {
-        new import_obsidian3.Notice(trans.action.cannotUndo);
+        new import_obsidian2.Notice(trans.action.cannotUndo);
         return false;
       }
       if (strategy === "custom-folder") {
         const trashPath = this.plugin.settings.trashFolderOverride || ".vault-trash";
         try {
           for (const file of files) {
-            const trashFilePath = path2.posix.join(trashPath, file.name);
+            const trashFilePath = path.posix.join(trashPath, file.name);
             if (yield this.app.vault.adapter.exists(trashFilePath)) {
               const trashFile = this.app.vault.getAbstractFileByPath(trashFilePath);
-              if (trashFile instanceof import_obsidian3.TFile) {
+              if (trashFile instanceof import_obsidian2.TFile) {
                 const originalPath = file.path;
                 yield this.app.fileManager.renameFile(trashFile, originalPath);
               }
             }
           }
-          new import_obsidian3.Notice(trans.action.restoreSuccess.replace("{count}", String(files.length)));
+          new import_obsidian2.Notice(trans.action.restoreSuccess.replace("{count}", String(files.length)));
           return true;
         } catch (error) {
           console.error("Error during undo:", error);
-          new import_obsidian3.Notice(trans.action.restoreFailed);
+          new import_obsidian2.Notice(trans.action.restoreFailed);
           return false;
         }
       }
-      new import_obsidian3.Notice(trans.action.undoNotSupported);
+      new import_obsidian2.Notice(trans.action.undoNotSupported);
       return false;
     });
   }
 };
 
 // src/previewModal.ts
-var import_obsidian4 = __toModule(require("obsidian"));
-var PreviewModal = class extends import_obsidian4.Modal {
+var import_obsidian3 = __toModule(require("obsidian"));
+var PreviewModal = class extends import_obsidian3.Modal {
   constructor(app, files, onConfirm, language) {
     super(app);
     this.confirmed = false;
@@ -806,8 +779,8 @@ var PreviewModal = class extends import_obsidian4.Modal {
 };
 
 // src/dashboardModal.ts
-var import_obsidian5 = __toModule(require("obsidian"));
-var DashboardModal = class extends import_obsidian5.Modal {
+var import_obsidian4 = __toModule(require("obsidian"));
+var DashboardModal = class extends import_obsidian4.Modal {
   constructor(app, plugin) {
     super(app);
     this.scanResult = null;
@@ -943,13 +916,13 @@ var DashboardModal = class extends import_obsidian5.Modal {
     return __async(this, null, function* () {
       const trans = t();
       this.isScanning = true;
-      new import_obsidian5.Notice(trans.dashboard.scanVault);
+      new import_obsidian4.Notice(trans.dashboard.scanVault);
       this.onOpen();
       try {
         this.scanResult = yield this.scanService.scanVault();
-        new import_obsidian5.Notice(trans.dashboard.scanCompleteNotice.replace("{count}", String(this.scanResult.orphans.length)));
+        new import_obsidian4.Notice(trans.dashboard.scanCompleteNotice.replace("{count}", String(this.scanResult.orphans.length)));
       } catch (error) {
-        new import_obsidian5.Notice(trans.dashboard.scanFailed.replace("{error}", error.message));
+        new import_obsidian4.Notice(trans.dashboard.scanFailed.replace("{error}", error.message));
         console.error("Scan error:", error);
       }
       this.isScanning = false;
@@ -959,11 +932,11 @@ var DashboardModal = class extends import_obsidian5.Modal {
   cleanAttachments() {
     const trans = t();
     if (!this.scanResult) {
-      new import_obsidian5.Notice(trans.dashboard.scanFirst);
+      new import_obsidian4.Notice(trans.dashboard.scanFirst);
       return;
     }
     if (this.scanResult.orphanAttachments.length === 0) {
-      new import_obsidian5.Notice(trans.plugin.noOrphanAttachments);
+      new import_obsidian4.Notice(trans.plugin.noOrphanAttachments);
       return;
     }
     const fileInfos = this.actionService.prepareFileList(this.scanResult.orphanAttachments);
@@ -976,11 +949,11 @@ var DashboardModal = class extends import_obsidian5.Modal {
   cleanNotes() {
     const trans = t();
     if (!this.scanResult) {
-      new import_obsidian5.Notice(trans.dashboard.scanFirst);
+      new import_obsidian4.Notice(trans.dashboard.scanFirst);
       return;
     }
     if (this.scanResult.orphanNotes.length === 0) {
-      new import_obsidian5.Notice(trans.plugin.noOrphanNotes);
+      new import_obsidian4.Notice(trans.plugin.noOrphanNotes);
       return;
     }
     const fileInfos = this.actionService.prepareFileList(this.scanResult.orphanNotes);
@@ -993,11 +966,11 @@ var DashboardModal = class extends import_obsidian5.Modal {
   cleanAll() {
     const trans = t();
     if (!this.scanResult) {
-      new import_obsidian5.Notice(trans.dashboard.scanFirst);
+      new import_obsidian4.Notice(trans.dashboard.scanFirst);
       return;
     }
     if (this.scanResult.orphans.length === 0) {
-      new import_obsidian5.Notice(trans.plugin.noOrphans);
+      new import_obsidian4.Notice(trans.plugin.noOrphans);
       return;
     }
     const fileInfos = this.actionService.prepareFileList(this.scanResult.orphans);
@@ -1014,8 +987,8 @@ var DashboardModal = class extends import_obsidian5.Modal {
 };
 
 // src/autoCleanScheduler.ts
-var import_obsidian6 = __toModule(require("obsidian"));
-var STORAGE_KEY_LAST_CLEAN = "nuke-cleaner-last-auto-clean";
+var import_obsidian5 = __toModule(require("obsidian"));
+var STORAGE_KEY_LAST_CLEAN = "vault-cleaner-last-auto-clean";
 var AutoCleanScheduler = class {
   constructor(plugin) {
     this.intervalId = null;
@@ -1075,10 +1048,10 @@ var AutoCleanScheduler = class {
         }
         yield this.actionService.executeDelete(scanResult.orphanAttachments);
         yield this.setLastCleanTime(Date.now());
-        new import_obsidian6.Notice(trans.action.autoCleanNotice.replace("{count}", String(scanResult.orphanAttachments.length)));
+        new import_obsidian5.Notice(trans.action.autoCleanNotice.replace("{count}", String(scanResult.orphanAttachments.length)));
       } catch (error) {
         console.error("Auto clean failed:", error);
-        new import_obsidian6.Notice(trans.action.autoCleanFailed.replace("{error}", error.message));
+        new import_obsidian5.Notice(trans.action.autoCleanFailed.replace("{error}", error.message));
       }
     });
   }
@@ -1121,16 +1094,7 @@ var AutoCleanScheduler = class {
 };
 
 // src/main.ts
-var CustomFilter2 = class {
-  constructor(regexes, strings) {
-    this.regexes = new Set(regexes.map((x) => RegExp(x)));
-    this.strings = new Set(strings);
-  }
-  test(input) {
-    return Array.from(this.regexes).some((x) => x.test(input)) || Array.from(this.strings).some((x) => x === input);
-  }
-};
-var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
+var VaultCleanerPlugin = class extends import_obsidian6.Plugin {
   onload() {
     return __async(this, null, function* () {
       yield this.loadSettings();
@@ -1155,7 +1119,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
         callback: () => __async(this, null, function* () {
           setLanguage(this.settings.language);
           const trans2 = t();
-          new import_obsidian7.Notice(trans2.plugin.gatheringAttachments);
+          new import_obsidian6.Notice(trans2.plugin.gatheringAttachments);
           const scanResult = yield this.scanService.scanVault();
           if (scanResult.orphanAttachments.length > 0) {
             const fileInfos = this.actionService.prepareFileList(scanResult.orphanAttachments);
@@ -1163,7 +1127,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
               yield this.actionService.executeDelete(scanResult.orphanAttachments);
             }), this.settings.language).open();
           } else {
-            new import_obsidian7.Notice(trans2.plugin.noOrphanAttachments);
+            new import_obsidian6.Notice(trans2.plugin.noOrphanAttachments);
           }
         })
       });
@@ -1173,7 +1137,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
         callback: () => __async(this, null, function* () {
           setLanguage(this.settings.language);
           const trans2 = t();
-          new import_obsidian7.Notice(trans2.plugin.gatheringNotes);
+          new import_obsidian6.Notice(trans2.plugin.gatheringNotes);
           const scanResult = yield this.scanService.scanVault();
           if (scanResult.orphanNotes.length > 0) {
             const fileInfos = this.actionService.prepareFileList(scanResult.orphanNotes);
@@ -1181,7 +1145,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
               yield this.actionService.executeDelete(scanResult.orphanNotes);
             }), this.settings.language).open();
           } else {
-            new import_obsidian7.Notice(trans2.plugin.noOrphanNotes);
+            new import_obsidian6.Notice(trans2.plugin.noOrphanNotes);
           }
         })
       });
@@ -1191,7 +1155,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
         callback: () => __async(this, null, function* () {
           setLanguage(this.settings.language);
           const trans2 = t();
-          new import_obsidian7.Notice(trans2.plugin.gatheringFiles);
+          new import_obsidian6.Notice(trans2.plugin.gatheringFiles);
           const scanResult = yield this.scanService.scanVault();
           if (scanResult.orphans.length > 0) {
             const fileInfos = this.actionService.prepareFileList(scanResult.orphans);
@@ -1199,7 +1163,7 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
               yield this.actionService.executeDelete(scanResult.orphans);
             }), this.settings.language).open();
           } else {
-            new import_obsidian7.Notice(trans2.plugin.noOrphans);
+            new import_obsidian6.Notice(trans2.plugin.noOrphans);
           }
         })
       });
@@ -1224,90 +1188,4 @@ var VaultCleanerPlugin = class extends import_obsidian7.Plugin {
       this.autoCleanScheduler.updateSettings();
     });
   }
-  getIgnoreFilter() {
-    const strings = [];
-    if (this.settings.trashFolderOverride.length > 0) {
-      strings.push(this.settings.trashFolderOverride);
-    }
-    return new CustomFilter2(this.settings.ignorePatterns, strings);
-  }
-  shouldUseSystemTrash() {
-    switch (this.app.vault.config.trashOption) {
-      case "system":
-        return true;
-      default:
-        return false;
-    }
-  }
-  getAttachmentsPaths() {
-    if (this.settings.attachmentsPaths.length === 0) {
-      return [this.app.vault.config.attachmentFolderPath];
-    }
-    return this.settings.attachmentsPaths;
-  }
-  isAttachment(file) {
-    return this.getAttachmentsPaths().some((element) => {
-      if (element.startsWith("./")) {
-        if (this.settings.alternativeAttachmentAlg) {
-          let path3 = file.parent;
-          while (path3 && path3.name !== void 0 && path3.name.length > 0) {
-            if (path3.name === element.substring(2)) {
-              return true;
-            }
-            path3 = path3.parent;
-          }
-        } else {
-          return file.path.startsWith(element.substring(2)) || file.path.contains(element.substring(1) + "/");
-        }
-      } else {
-        if (file.parent && file.parent.path === element) {
-          return true;
-        }
-        if (file.path.startsWith(element)) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-  getCanvasLinks() {
-    return __async(this, null, function* () {
-      const links = new Set();
-      yield Promise.all(this.app.vault.getFiles().filter((f) => f.extension === "canvas").map((f) => __async(this, null, function* () {
-        const content = yield this.app.vault.read(f);
-        try {
-          const canvas = JSON.parse(content);
-          canvas.nodes.filter((node) => node.type === "file").forEach((node) => links.add(node.file));
-        } catch (e) {
-          console.error("Error parsing canvas file " + f.path + "\n", e);
-        }
-      })));
-      return links;
-    });
-  }
-  getOrphans() {
-    return __async(this, null, function* () {
-      const links = new Set(Object.values(this.app.metadataCache.resolvedLinks).flatMap((x) => Object.keys(x)));
-      const canvasLinks = yield this.getCanvasLinks();
-      const filter = this.getIgnoreFilter();
-      return this.app.vault.getFiles().filter((file) => {
-        return ![
-          links.has(file.path),
-          canvasLinks.has(file.path),
-          filter.test(file.path)
-        ].some((x) => x === true);
-      });
-    });
-  }
-  trash(files) {
-    setLanguage(this.settings.language);
-    const trans = t();
-    if (files.length > 0) {
-      new TrashFilesModal(this.app, files, this.settings.trashFolderOverride, this.shouldUseSystemTrash()).open();
-    } else {
-      new import_obsidian7.Notice(trans.plugin.noOrphans);
-    }
-  }
 };
-
-/* nosourcemap */

@@ -15,6 +15,32 @@ An Obsidian plugin for intelligently cleaning up orphaned files and attachments 
 - **Flexible Configuration**: Supports whitelist folders, regex ignore patterns, custom attachment paths, and more
 - **Bilingual Interface**: Full internationalization support with English and Chinese
 
+## How It Works
+
+### Orphan File Detection
+
+A file is considered **orphaned** when it meets ALL of the following conditions:
+
+- **No inbound links**: No other file links to it
+- **No outbound links**: It doesn't link to any other file (including attachments - linking to an attachment means it's not orphaned)
+- **No canvas references**: Not referenced in any Canvas file
+
+### Attachment Detection
+
+A file is classified as an **attachment** if it matches your configured attachment paths:
+
+| Path Type | Example | Matching Logic |
+|-----------|---------|----------------|
+| Absolute path | `attachments` | File parent path or file path starts with it |
+| Relative path | `./attachments` | File path starts with `attachments` (default) or any parent directory name matches `attachments` (alternative algorithm) |
+
+### Excluded from Scanning
+
+- Files in whitelisted folders
+- Files matching ignore patterns (regex)
+- Recently modified files (within protection period, default: 7 days)
+- Files in `.obsidian/` and other system folders
+
 ## Screenshots
 
 ![Dashboard](assets/1.png)

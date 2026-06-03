@@ -114,25 +114,47 @@ export class ScanService {
 
 		return (now - fileModifiedTime) < protectedMs;
 	}
-
+	// 孤立文件 = 既不在 inboundLinks 中，也不在 outboundLinks 中的文件,即：既没有被别人链接，也没有链接别人 → 孤立文件
 	async scanVault(): Promise<ScanResult> {
-		const links = new Set<string>(
+		// 被其他文件链接的文件 B链接A，A，B都不算孤立
+		const inboundLinks = new Set<string>(
 			Object.values(this.app.metadataCache.resolvedLinks)
 				.flatMap(x => Object.keys(x))
 		);
+
+		// 链接了其他文件的文件（你的逻辑：有链接出去就不算孤立）
+		// 只有当文件实际链接了其他文件（值不为空对象）才算
+		const resolvedLinks = this.app.metadataCache.resolvedLinks;
+		const outboundLinks = new Set<string>();
+		for (const source in resolvedLinks) {
+			if (Object.keys(resolvedLinks[source]).length > 0) {
+				outboundLinks.add(source);
+			}
+		}
+
 		const canvasLinks = await this.getCanvasLinks();
 		const filter = this.getIgnoreFilter();
 
+		// 调试：打印链接关系
+		// console.log("=== Vault Cleaner 调试信息 ===");
+		// console.log("被链接的文件 (inboundLinks):", [...inboundLinks]);
+		// console.log("链接出去的文件 (outboundLinks):", [...outboundLinks]);
+		// console.log("Canvas 引用的文件:", [...canvasLinks]);
+		// console.log("resolvedLinks 原始数据:", this.app.metadataCache.resolvedLinks);
+
 		const orphans = this.app.vault.getFiles().filter(file => {
-			return ![
-				links.has(file.path),
-				canvasLinks.has(file.path),
-				filter.test(file.path),
-				this.isProtected(file)
-			].some(x => x === true);
+		return ![
+			inboundLinks.has(file.path),   // 被其他文件链接
+			outboundLinks.has(file.path),  // 链接了其他文件
+			canvasLinks.has(file.path),    // 在 canvas 中被引用
+			filter.test(file.path),        // 匹配排除路径模式（如 .obsidian/）
+			this.isProtected(file)         // 受保护的文件（如配置文件）
+		].some(x => x === true);
 		});
 
+		// 从孤立文件中筛选出附件，也就是孤立附件
 		const orphanAttachments = orphans.filter(file => this.isAttachment(file));
+		// 从孤立文件中筛选出笔记，也就是孤立笔记
 		const orphanNotes = orphans.filter(file => file.extension === "md");
 
 		return {
